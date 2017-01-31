@@ -3,9 +3,9 @@
 """ coil-generator.py
 
 Usage:
-	coil-generator.py by-radius-and-turns <radius> <turns> <track_width> (--plot|--module)
-	coil-generator.py by-spacing-and-turns <spacing> <turns> <track_width> (--plot|--module)
-	coil-generator.py by-spacing-and-radius <spacing> <radius> <track_width> (--plot|--module)
+	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-radius-and-turns <radius> <turns> <track_width> [<angular_resolution>] 
+	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-spacing-and-turns <spacing> <turns> <track_width> [<angular_resolution>]
+	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-spacing-and-radius <spacing> <radius> <track_width> [<angular_resolution>]
 
 """
 import plotter
@@ -31,14 +31,9 @@ if __name__ == "__main__":
 	args = docopt.docopt(__doc__)
 
 	logging.basicConfig(level=logging.INFO)
-	net = 'coil'
 
-	start_x = 100
-	start_y = 100
-
-	segment_length = 1
-
-	track_width = args["<track_width>"]
+	track_width = measure_to_float(args["<track_width>"])
+	angular_resolution = float(args.get("[<angular_resolution>]", 5))
 
 	layer = "F.Cu"
 
@@ -56,8 +51,18 @@ if __name__ == "__main__":
 		track_spacing = measure_to_float(args["<spacing>"])
 		radius = measure_to_float(args["<radius>"])
 
-	logging.info("Generating coil of radius {}mm, {} turns (spacing {}mm)".format(radius, turns, track_spacing))
+	logging.info("Generating coil of radius {}mm, {} turns, spacing {}mm, track width {}mm)".format(radius, turns, track_spacing, track_width))
 	
-	coil = Coil.get_by_spacing_and_max_radius(track_spacing, radius)
+	coil = Coil.get_by_spacing_and_max_radius(track_spacing, radius, angular_resolution=angular_resolution)
 
-	plotter.plot_coil(coil.x, coil.y)
+	if args["--plot"]:
+		plotter.plot_coil(coil, track_width)
+	elif args["--module"]:
+		module_data = {
+			"name": args["--module"],
+			"desc": args.get("--desc", "")
+		}
+
+		module = kicad.make_coil(coil, track_width, module_data)
+
+		print(module)
