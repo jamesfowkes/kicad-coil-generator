@@ -3,11 +3,12 @@
 """ coil-generator.py
 
 Usage:
-	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-radius-and-turns <radius> <turns> <track_width> [<angular_resolution>] 
-	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-spacing-and-turns <spacing> <turns> <track_width> [<angular_resolution>]
-	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-spacing-and-radius <spacing> <radius> <track_width> [<angular_resolution>]
+	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-radius-and-turns <radius_mm> <turns_mm> <track_width_mm> [<angular_resolution>]
+	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-spacing-and-turns <spacing_mm> <turns_mm> <track_width_mm> [<angular_resolution>]
+	coil-generator.py (--plot|--module=<name> [--desc=<desc>]) by-spacing-and-radius <spacing_mm> <radius_mm> <track_width_mm> [<angular_resolution>]
 
 """
+
 import plotter
 import kicad
 import logging
@@ -52,7 +53,7 @@ if __name__ == "__main__":
 		radius = measure_to_float(args["<radius>"])
 
 	logging.info("Generating coil of radius {}mm, {} turns, spacing {}mm, track width {}mm)".format(radius, turns, track_spacing, track_width))
-	
+
 	coil = Coil.get_by_spacing_and_max_radius(track_spacing, radius, angular_resolution=angular_resolution)
 
 	if args["--plot"]:
