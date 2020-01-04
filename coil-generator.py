@@ -52,7 +52,7 @@ if __name__ == "__main__":
 		track_spacing = measure_to_float(args["<spacing>"])
 		radius = measure_to_float(args["<radius>"])
 
-	logging.info("Generating coil of radius {}mm, {} turns, spacing {}mm, track width {}mm)".format(radius, turns, track_spacing, track_width))
+	logging.info("Generating coil of radius {} mm, {} turns, spacing {} mm, track width {} mm)".format(radius, turns, track_spacing, track_width))
 
 	coil = Coil.get_by_spacing_and_max_radius(track_spacing, radius, angular_resolution=angular_resolution)
 
