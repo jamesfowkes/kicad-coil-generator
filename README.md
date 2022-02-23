@@ -1,2 +1,3 @@
-# kicad-coil-generator
-A utility to create PCB coils for kicad
+# Kicad Coil Generator
+
+A utility to create PCB coils for kicad.
